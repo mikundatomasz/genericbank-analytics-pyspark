@@ -763,7 +763,7 @@ wheels = [
 [[package]]
 name = "genericbank-analytics-pyspark"
 version = "0.1.0"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "delta-spark" },
 ]
