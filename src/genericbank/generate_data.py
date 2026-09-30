@@ -625,8 +625,8 @@ def write_landing(n_customers: int, seed: int) -> dict:
     accounts = accounts_frame(bank)
     accounts.to_csv(landing / "accounts.csv", index=False)
     files["accounts.csv"] = len(accounts)
-    patterns.ground_truth.to_csv(landing / "_ground_truth.csv", index=False)
-    files["_ground_truth.csv"] = len(patterns.ground_truth)
+    patterns.ground_truth.to_csv(landing / "ground_truth.csv", index=False)
+    files["ground_truth.csv"] = len(patterns.ground_truth)
 
     txn_dir = landing / "transactions"
     txn_dir.mkdir()

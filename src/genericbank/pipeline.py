@@ -8,6 +8,8 @@ from pyspark.sql import functions as F
 
 from genericbank import bronze, config, quality, silver
 from genericbank.spark import get_spark
+from genericbank.gold import kpi
+
 
 
 def _write_delta(df: DataFrame, path: Path, partition_by: str | None = None) -> None:
@@ -60,10 +62,18 @@ def run_silver(spark: SparkSession, run_id: str) -> None:
     report.write.format("delta").mode("append").save(str(config.DATA_DIR / "quality" / "silver_transactions"))
     flagged.unpersist()
 
+def run_gold(spark: SparkSession) -> None:
+    transactions = _read_delta(spark, config.SILVER_DIR / "transactions")
+    customers = _read_delta(spark, config.SILVER_DIR / "customers")
+    _write_delta(
+        kpi.customer_monthly_kpi(transactions, customers),
+        config.GOLD_DIR / "customer_monthly_kpi",
+    )
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="GenericBank medallion pipeline")
-    parser.add_argument("--stage", choices=["bronze", "silver", "all"], default="all")
+    parser.add_argument("--stage", choices=["bronze", "silver", "gold", "all"], default="all")
     args = parser.parse_args()
 
     run_id = uuid.uuid4().hex
@@ -73,6 +83,8 @@ def main() -> None:
         run_bronze(spark, run_id)
     if args.stage in ("silver", "all"):
         run_silver(spark, run_id)
+    if args.stage in ("gold", "all"):
+        run_gold(spark)
     spark.stop()
 
 

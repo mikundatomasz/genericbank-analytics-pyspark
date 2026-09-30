@@ -41,7 +41,7 @@ SALARY_SHARE = 0.85                                  # customers with a monthly 
 BIRTH_YEAR_RANGE = (1950, 2005)
 RELATIONSHIP_START_RANGE = (date(2005, 1, 1), date(2025, 12, 31))
 
-# Injected patterns (recorded in _ground_truth.csv); customer groups are mutually disjoint
+# Injected patterns (recorded in ground_truth.csv); customer groups are mutually disjoint
 CHURN_CUSTOMER_SHARE = 0.015
 CHURN_START_RANGE = (date(2026, 2, 1), date(2026, 8, 1))      # month the drop starts, inclusive
 CHURN_DROP_RANGE = (0.70, 1.00)
